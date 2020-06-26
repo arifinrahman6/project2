@@ -13,18 +13,15 @@ channel_list = []
 @app.route("/", methods = ['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        new_name = request.form['name']
-        new_channel = request.form['new_channel']
-
-        if new_name != "":
-            session['name'] = new_name
-        if new_channel != "":
-            channel_list.append(new_channel)
+        if 'name' in request.form:
+            session['name'] = request.form['name']
+        if 'new_channel' in request.form:
+            channel_list.append(request.form['new_channel'])
 
         return redirect(url_for('index', name=session['name'], channels=channel_list))
     
     return render_template('index.html', name=session['name'], channels=channel_list)
 
-@app.route("/channels")
-def channels():
-    return render_template('index.html')
+@app.route("/channels/<channel_name>")
+def channel(channel_name):
+    return render_template('channel.html', channel_name='{channel_name}')

@@ -8,16 +8,22 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 socketio = SocketIO(app)
 
+channel_list = []
+
 @app.route("/", methods = ['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        session['name'] = request.form['name']
-        return redirect(url_for('index', name=session['name']))
+        new_name = request.form['name']
+        new_channel = request.form['new_channel']
+
+        if new_name != "":
+            session['name'] = new_name
+        if new_channel != "":
+            channel_list.append(new_channel)
+
+        return redirect(url_for('index', name=session['name'], channels=channel_list))
     
-    if 'name' in session:
-        return render_template('index.html', name=session['name'])
-    
-    return render_template('index.html')
+    return render_template('index.html', name=session['name'], channels=channel_list)
 
 @app.route("/channels")
 def channels():

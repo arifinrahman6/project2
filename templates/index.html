@@ -7,8 +7,16 @@
     <body>
         <form action="{{ url_for('index') }}" method="POST">
             <input type="text" name="name" placeholder="Enter a display name">
+            <input type="text" name="new_channel" placeholder="Add a channel">
             <button>Submit</button>
         </form>
         <p>Hello {{ name }}</p>
+        <br>
+        <h1>Channels</h1>
+        <ul>
+            {% for channel in channels %}
+                <li>{{ channel }}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>

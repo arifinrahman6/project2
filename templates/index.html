@@ -5,8 +5,10 @@
         <title>Flack</title>
     </head>
     <body>
-        <form action="">
-            <input type="text" placeholder="Enter a display name">
+        <form action="{{ url_for('index') }}" method="POST">
+            <input type="text" name="name" placeholder="Enter a display name">
+            <button>Submit</button>
         </form>
+        <p>Hello {{ name }}</p>
     </body>
 </html>

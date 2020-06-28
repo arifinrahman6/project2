@@ -42,6 +42,10 @@ def index():
 @app.route("/channels/<channel_name>", methods=['GET', 'POST'])
 def channel(channel_name):
     '''Shows messages in the channel'''
+
+    # Remember the last channel user was in
+    session['last_channel'] = channel_name
+
     if request.method == 'POST':
         # A formatted message includes message, time, and name
         now = datetime.now()

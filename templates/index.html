@@ -2,6 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <script>
+            last_channel = localStorage.getItem('last_channel')
+            if(last_channel != null) {
+                window.location.replace(last_channel);
+            }
+        </script>
         <title>Flack</title>
     </head>
     <body>

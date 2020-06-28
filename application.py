@@ -25,16 +25,21 @@ def index():
             new_channel = request.form['new_channel']
             messages[new_channel] = Queue(maxsize=100)
             channel_list.append(new_channel)
+        
+        # Redirect after post
+        if 'name' in session:
+            return redirect(url_for('index', name=session['name'], channels=channel_list))
+        else:
+            return redirect(url_for('index', channels=channel_list))
+    # GET requests
+    else:
+        if 'name' in session:
+            return render_template('index.html', name=session['name'], channels=channel_list)
+        else:
+            return render_template('index.html', channels=channel_list)
 
-        return redirect(url_for('index', name=session['name'], channels=channel_list))
-    
-    if 'name' in session:
-        return render_template('index.html', name=session['name'], channels=channel_list)
-    
-    return render_template('index.html', channels=channel_list)
 
-
-@app.route("/channels/<channel_name>", methods=['POST'])
+@app.route("/channels/<channel_name>", methods=['GET', 'POST'])
 def channel(channel_name):
     '''Shows messages in the channel'''
     if request.method == 'POST':
@@ -59,3 +64,11 @@ def channel(channel_name):
 #     # remove the name from the session if it's there
 #     session.pop('name', None)
 #     return redirect(url_for('index'))
+
+@socketio.on("send message")
+def chat(data):
+    data['name'] = session['name']
+    emit("receive message", data, broadcast=True)
+
+if __name__ == '__main__':
+    socketio.run(app)

@@ -25,27 +25,14 @@ def index():
             new_channel = request.form['new_channel']
             messages[new_channel] = Queue(maxsize=100)
             channel_list.append(new_channel)
-        
-        # Redirect after post
-        if 'name' in session:
-            return redirect(url_for('index', name=session['name'], channels=channel_list))
-        else:
-            return redirect(url_for('index', channels=channel_list))
-    # GET requests
-    else:
-        if 'name' in session:
-            return render_template('index.html', name=session['name'], channels=channel_list)
-        else:
-            return render_template('index.html', channels=channel_list)
+    
+    username = session['name']
+    return render_template('index.html', name=username, channels=channel_list)
 
 
 @app.route("/channels/<channel_name>", methods=['GET', 'POST'])
 def channel(channel_name):
     '''Shows messages in the channel'''
-
-    # Remember the last channel user was in
-    session['last_channel'] = channel_name
-
     if request.method == 'POST':
         # A formatted message includes message, time, and name
         now = datetime.now()
@@ -58,9 +45,8 @@ def channel(channel_name):
 
         messages[channel_name].put(new_message)
 
-        return redirect(url_for('channel', channel_name=channel_name, messages=messages[channel_name].queue))
-
-    return render_template('channel.html', channel_name=channel_name, messages=messages[channel_name].queue)
+    return render_template('channel.html', channel_name=channel_name, 
+        channels=channel_list, messages=messages[channel_name].queue)
 
 
 # @app.route('/leave')
@@ -73,6 +59,12 @@ def channel(channel_name):
 def chat(data):
     data['name'] = session['name']
     emit("receive message", data, broadcast=True)
+
+# @socketio.on("create channel")
+# def create_channel(new_channel):
+#     print(new_channel)
+#     channel_list.append(new_channel)
+#     emit("add channel", new_channel, broadcast=True)
 
 if __name__ == '__main__':
     socketio.run(app)

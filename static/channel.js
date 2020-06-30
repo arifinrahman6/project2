@@ -18,7 +18,3 @@ socket.on('receive message', data => {
     li.innerHTML = data.message + ', ' + data.datetime + ', ' + data.name;
     document.querySelector('ul').append(li);
 });
-
-window.onbeforeunload = function () {
-    return "Do you really want to close?";
-};

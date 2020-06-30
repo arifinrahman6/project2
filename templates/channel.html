@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <script>localStorage.setItem("last_channel", "{{ url_for('channel', channel_name=channel_name) }}");</script>
+        <!-- <script>localStorage.setItem("last_channel", "{{ url_for('channel', channel_name=channel_name) }}");</script> -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
         <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='channel.js') }}"></script>
         <title>Flack - {{ channel_name }}</title>
@@ -18,7 +18,7 @@
                 <li>{{ message[0] }}, {{ message[1] }}, {{ message[2] }} </li>
             {% endfor %}
         </ul>
-        <!-- <h1>Channels</h1>
+        <h1>Channels</h1>
         <form action="{{ url_for('index') }}" method="POST">
             <input type="text" name="new_channel" placeholder="Create a channel">
             <button>Add</button>
@@ -27,6 +27,6 @@
             {% for channel in channels %}
                 <li><a href="{{ url_for('channel', channel_name=channel) }}">{{ channel }}</a></li>
             {% endfor %}
-        </ul> -->
+        </ul>
     </body>
 </html>
